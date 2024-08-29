@@ -45,6 +45,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   get_it: ^7.7.0
   flutterflow_ui: ^0.3.1
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
