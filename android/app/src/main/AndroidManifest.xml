@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kisaan.app">
     <application
         android:label="nfc3_overload_oblivion"
         android:name="${applicationName}"
