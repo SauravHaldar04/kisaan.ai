@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     ),
     SoilReportPage(),
     WeatherScreen(),
-    chatHelp2(),
+    ChatHelp2(),
   ];
 
   @override
