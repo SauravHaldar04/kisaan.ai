@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:nfc3_overload_oblivion/common/global/placemark.dart';
-
 
 import 'package:nfc3_overload_oblivion/features/home/widgets/additional_info_item.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nfc3_overload_oblivion/secrets/secrets.dart';
+import 'package:provider/provider.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -48,6 +50,69 @@ class _WeatherScreenState extends State<WeatherScreen> {
     }
 
     return dailyForecasts.values.toList();
+  }
+
+  Position? position;
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      showAboutDialog(
+          context: context,
+          applicationName: 'Location services are disabled.',
+          applicationVersion: 'Please enable location services to continue.',
+          children: [Text('Please enable location services to continue.')]);
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  List<Placemark> placemarks = [];
+
+  void positionDetermination() async {
+    position = await _determinePosition();
+    print(position);
+
+    placemarks =
+        await placemarkFromCoordinates(position!.latitude, position!.longitude);
+    print(placemarks);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      positionDetermination();
+    });
   }
 
   @override

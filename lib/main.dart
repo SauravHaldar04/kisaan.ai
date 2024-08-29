@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc3_overload_oblivion/common/cubits/auth_user/auth_user_cubit.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
+import 'package:nfc3_overload_oblivion/common/global/placemark.dart';
 import 'package:nfc3_overload_oblivion/features/auth/pages/login_page.dart';
 import 'package:nfc3_overload_oblivion/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nfc3_overload_oblivion/features/home/home_page.dart';
 import 'package:nfc3_overload_oblivion/features/home/widgets/report/crop_report_widget.dart';
 import 'package:nfc3_overload_oblivion/init_dependencies.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +18,14 @@ void main() async {
       BlocProvider(create: (context) => serviceLocator<AuthUserCubit>()),
       BlocProvider(create: (context) => serviceLocator<AuthBloc>()),
     ],
-    child: const MyApp(),
+    child: MultiProvider(
+      providers: [
+        Provider<ChangeNotifier>(
+          create: (context) => PlacemarkProvider(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
   ));
 }
 
@@ -51,7 +60,7 @@ class _MyAppState extends State<MyApp> {
         if (state) {
           return const HomePage();
         }
-        return const LoginWidget();
+        return const HomePage();
       }),
     );
   }

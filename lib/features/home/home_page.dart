@@ -8,6 +8,7 @@ import 'package:nfc3_overload_oblivion/features/home/chat_help/chat_Help.dart';
 import 'package:nfc3_overload_oblivion/features/home/chat_help/chat_Help2.dart';
 import 'package:nfc3_overload_oblivion/features/home/soil_report_page.dart';
 import 'package:nfc3_overload_oblivion/features/home/weather_screen.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,9 +21,6 @@ class _HomePageState extends State<HomePage> {
   int currentPage = 0;
 
   List<Widget> pages = [
-    // Scaffold(
-    //   body: Text('Home'),
-    // ),
     AgricultureDashboardWidget(),
     Scaffold(
       body: Center(
@@ -34,63 +32,11 @@ class _HomePageState extends State<HomePage> {
     chatHelp2(),
   ];
 
-  Position? position;
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      showAboutDialog(
-          context: context,
-          applicationName: 'Location services are disabled.',
-          applicationVersion: 'Please enable location services to continue.',
-          children: [Text('Please enable location services to continue.')]);
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
-  }
-
-  void positionDetermination() async {
-    position = await _determinePosition();
-    print(position);
-    placemarks =
-        await placemarkFromCoordinates(position!.latitude, position!.longitude);
-    print(placemarks);
-  }
-
   @override
   void initState() {
     // TODO: implement initState
 
     super.initState();
-    positionDetermination();
   }
 
   @override

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -5,6 +8,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
+import 'package:nfc3_overload_oblivion/common/global/flask_string.dart';
+import 'package:nfc3_overload_oblivion/common/utils/pickimage.dart';
 import 'package:nfc3_overload_oblivion/features/home/widgets/report/crop_report_model.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +34,47 @@ class _ReportWidgetState extends State<ReportWidget>
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = <String, AnimationInfo>{};
+
+  String? detectedDisease;
+  String? diseaseDescription;
+  void analyzeImage() async {
+    try {
+      if (imageFile == null) {
+        return;
+      }
+      final response = await http.post(
+        Uri.parse('$url/predict_disease'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(<String, dynamic>{
+          'content': base64.encode(await File(imageFile!.path).readAsBytes())
+        }),
+      );
+      print(json.decode(response.body));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  File? imageFile;
+  bool isLoading = false;
+  void pick() async {
+    setState(() {
+      isLoading = true;
+    });
+    if (imageFile != null) {
+      imageFile = null;
+      setState(() {
+        isLoading = false;
+      });
+    }
+
+    await pickImage().then((value) => imageFile = value);
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   void initState() {
@@ -155,91 +201,130 @@ class _ReportWidgetState extends State<ReportWidget>
                           width: 2.0,
                         ),
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Icon(
-                              Icons.add_a_photo_rounded,
-                              color: AppPallete.primaryColor,
-                              size: 32.0,
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 0.0, 0.0, 0.0),
-                              child: Text(
-                                'Upload Image for analysis',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Outfit',
-                                  color: AppPallete.primaryColor,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500,
+                      child: GestureDetector(
+                        onTap: () => pick(),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Icon(
+                                Icons.add_a_photo_rounded,
+                                color: AppPallete.primaryColor,
+                                size: 32.0,
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 0.0, 0.0, 0.0),
+                                child: Text(
+                                  'Upload Image for analysis',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    color: AppPallete.primaryColor,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ).animateOnPageLoad(
                         animationsMap['containerOnPageLoadAnimation']!),
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 12.0),
-                    child: FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
-                      },
-                      text: 'Analyze Crop',
-                      icon: Icon(
-                        Icons.analytics_sharp,
-                        size: 30.0,
-                      ),
-                      options: FFButtonOptions(
-                        width: double.infinity,
-                        height: 54.0,
-                        padding: EdgeInsets.all(0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: AppPallete.primaryColor,
-                        textStyle: TextStyle(
-                          color: AppPallete.secondaryBackground,
-                          fontFamily: 'Outfit',
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        elevation: 4.0,
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(12.0),
+                  if (isLoading)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
+                      child: Center(
+                        child: CircularProgressIndicator(),
                       ),
                     ),
-                  ),
-                  Padding(
+                  if (imageFile != null)
+                    Padding(
                       padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-                      child: Text(
-                        'Analysis Report:',
-                        style: TextStyle(
-                          fontFamily: 'Outfit',
-                          color: AppPallete.primaryText,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w600,
+                          EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: Image.file(
+                          imageFile!,
+                          width: double.infinity,
+                          height: 200.0,
+                          fit: BoxFit.cover,
                         ),
-                      )),
-                  Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontFamily: 'Outfit',
-                        color: AppPallete.primaryText,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w500,
-                      )),
+                      ),
+                    ),
+                  if (imageFile != null)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 12.0),
+                      child: FFButtonWidget(
+                        onPressed: () {
+                          analyzeImage();
+                        },
+                        text: 'Analyze Crop',
+                        icon: Icon(
+                          Icons.analytics_sharp,
+                          size: 30.0,
+                        ),
+                        options: FFButtonOptions(
+                          width: double.infinity,
+                          height: 54.0,
+                          padding: EdgeInsets.all(0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: AppPallete.primaryColor,
+                          textStyle: TextStyle(
+                            color: AppPallete.secondaryBackground,
+                            fontFamily: 'Outfit',
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          elevation: 4.0,
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                      ),
+                    ),
+                  if (imageFile != null)
+                    Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                        child: Text(
+                          'Analysis Report:',
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            color: AppPallete.primaryText,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )),
+                  if (detectedDisease != null)
+                    Column(
+                      children: [
+                        Text('Detected Disease: $detectedDisease',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontFamily: 'Outfit',
+                              color: AppPallete.primaryText,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        Text('Description: $diseaseDescription',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontFamily: 'Outfit',
+                              color: AppPallete.primaryText,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            ))
+                      ],
+                    ),
                 ],
               ),
             ),

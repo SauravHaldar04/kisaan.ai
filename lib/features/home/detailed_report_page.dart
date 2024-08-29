@@ -94,7 +94,13 @@ class SoilReportHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Soil Report History'),
+        title: const Text('Soil Report History',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              fontFamily: 'Outfit',
+            )),
         centerTitle: true,
       ),
       body: ListView.builder(
