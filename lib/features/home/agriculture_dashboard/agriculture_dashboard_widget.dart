@@ -336,21 +336,35 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                 decoration: BoxDecoration(
                   color: Color(0xFFF1F5F8),
                 ),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: crops.length,
-                  itemBuilder: (context, index) {
-                    final crop = crops[index];
-                    return Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 12, 12, 12),
-                      child: CropCardWidget(
-                        cropName: crop['cropName']!,
-                        landArea: crop['landArea']!,
-                        imageUrl: crop['imageUrl']!,
+                child: crops.isEmpty
+                    ? Center(
+                        child: Text(
+                          'No crops added yet. Tap "+" to add your first crop.',
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            color: Color(0xFF57636C),
+                            fontSize: 16,
+                            letterSpacing: 0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: crops.length,
+                        itemBuilder: (context, index) {
+                          final crop = crops[index];
+                          return Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(16, 12, 12, 12),
+                            child: CropCardWidget(
+                              cropName: crop['cropName']!,
+                              landArea: crop['landArea']!,
+                              imageUrl: crop['imageUrl']!,
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16, 12, 0, 0),

@@ -55,9 +55,9 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
               icon: Container(child: Icon(Icons.home)), label: 'Home'),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.grass), label: 'Crop Reports'),
+              icon: Icon(Icons.grass), label: 'Crop Reports3'),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.spa_outlined), label: 'Soil Reports'),
+              icon: Icon(Icons.spa_outlined), label: 'Soil Report'),
           const BottomNavigationBarItem(
               icon: Icon(Icons.cloud), label: 'Weather'),
           const BottomNavigationBarItem(
