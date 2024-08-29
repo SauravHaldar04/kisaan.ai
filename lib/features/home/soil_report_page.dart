@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
+import 'package:nfc3_overload_oblivion/features/home/detailed_report_page.dart';
 
 class SoilReportPage extends StatefulWidget {
   @override
@@ -8,18 +9,27 @@ class SoilReportPage extends StatefulWidget {
 }
 
 class _SoilReportPageState extends State<SoilReportPage> {
-  bool _imageUploaded = true; // Flag to track image upload
+  bool _imageUploaded = false; // Flag to track image upload
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Soil Report'),
+        title: const Text(
+          'Soil Report',
+          style: TextStyle(
+            fontFamily: 'Outfit',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.history),
             onPressed: () {
-              // Handle show history action
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SoilReportHistory()),
+              );
             },
           ),
         ],
@@ -62,6 +72,7 @@ class _SoilReportPageState extends State<SoilReportPage> {
                           'Upload Image for analysis',
                           textAlign: TextAlign.center,
                           style: TextStyle(
+                            fontFamily: 'Outfit',
                             color: AppPallete.primaryColor,
                             fontSize: 16.0,
                             fontWeight: FontWeight.w500,
@@ -117,7 +128,10 @@ class _SoilReportPageState extends State<SoilReportPage> {
               ),
               child: Text(
                 'Reports will be displayed here',
-                style: TextStyle(fontSize: 16.0),
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontFamily: 'Outfit',
+                ),
               ),
             ),
           ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
 import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard/agriculture_dashboard_widget.dart';
+import 'package:nfc3_overload_oblivion/features/home/chat_help/chat_Help.dart';
+import 'package:nfc3_overload_oblivion/features/home/chat_help/chat_Help2.dart';
 import 'package:nfc3_overload_oblivion/features/home/soil_report_page.dart';
 import 'package:nfc3_overload_oblivion/features/home/weather_screen.dart';
 
@@ -22,7 +24,8 @@ class _HomePageState extends State<HomePage> {
       ),
     ),
     SoilReportPage(),
-    WeatherScreen()
+    WeatherScreen(),
+    chatHelp2(),
   ];
 
   @override
@@ -49,13 +52,13 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
               icon: Container(child: Icon(Icons.home)), label: 'Home'),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.grass), label: 'Crop Reports3'),
+              icon: Icon(Icons.grass), label: 'Crop Reports'),
           const BottomNavigationBarItem(
               icon: Icon(Icons.spa_outlined), label: 'Soil Report'),
           const BottomNavigationBarItem(
               icon: Icon(Icons.cloud), label: 'Weather'),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: 'Profile'),
+              icon: Icon(Icons.chat), label: 'Chat Help'),
         ],
       ),
     );
