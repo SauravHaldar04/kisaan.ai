@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "137242774653",
+    "project_id": "kisaan-ai",
+    "storage_bucket": "kisaan-ai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137242774653:android:6e78253bb4f0abdd7db514",
+        "android_client_info": {
+          "package_name": "com.kisaan.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq347X0MfjFBCbFO33DzTdIveDz6klJxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
