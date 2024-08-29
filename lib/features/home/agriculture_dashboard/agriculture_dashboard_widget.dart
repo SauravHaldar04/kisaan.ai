@@ -411,7 +411,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                 TextField(
                                   controller: landAreaController,
                                   decoration: InputDecoration(
-                                    labelText: 'Land Area (in meters)',
+                                    labelText: 'Land Area (in meter²)',
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
                                       borderSide: BorderSide(
