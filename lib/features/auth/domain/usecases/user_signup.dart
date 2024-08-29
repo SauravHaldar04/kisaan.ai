@@ -1,5 +1,3 @@
-
-
 import 'package:fpdart/fpdart.dart';
 import 'package:nfc3_overload_oblivion/common/entities/user_entity.dart';
 import 'package:nfc3_overload_oblivion/common/error/failure.dart';
@@ -12,17 +10,25 @@ class UserSignup implements Usecase<User, UserSignupParams> {
   @override
   Future<Either<Failure, User>> call(UserSignupParams params) async {
     return await authRepository.signInWithEmailAndPassword(
-      lastName: params.lastName, firstName: params.firstName, email: params.email, password: params.password);
+        name: params.name,
+        landArea: params.landArea,
+        irrigationMethod: params.irrigationMethod,
+        email: params.email,
+        password: params.password);
   }
 }
 
 class UserSignupParams {
-  final String firstName;
-  final String lastName;
+  final String name;
+  final double landArea;
+  final String irrigationMethod;
   final String email;
   final String password;
 
   UserSignupParams(
-      {required this.firstName,required this.lastName,  required this.email, required this.password});
-
+      {required this.name,
+      required this.landArea,
+      required this.irrigationMethod,
+      required this.email,
+      required this.password});
 }

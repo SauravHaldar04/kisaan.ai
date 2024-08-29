@@ -12,10 +12,11 @@ abstract interface class AuthRemoteDatasources {
   GoogleSignIn get googleSignIn;
   
   Future<UserModel> signInWithEmailAndPassword({
-    required String firstName,
-    required String lastName,
+    required String name,
     required String email,
     required String password,
+    required double landArea,
+    required String irrigationMethod,
   });
   Future<UserModel> loginWithEmailAndPassword({
     required String email,
@@ -61,19 +62,23 @@ class AuthRemoteDatasourcesImpl implements AuthRemoteDatasources {
 
   @override
   Future<UserModel> signInWithEmailAndPassword({
-    required String firstName,
-    required String lastName,
+    required String name,
     required String email,
     required String password,
+    required double landArea,
+    required String irrigationMethod,
   }) async {
     try {
       final response = await firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       final user = UserModel(
           email: email,
-          firstName: firstName,
+         
           uid: response.user!.uid,
-          lastName: lastName);
+          name: name,
+          landArea: landArea,
+          irrigationMethod: irrigationMethod,
+          );
       await firestore
           .collection('users')
           .doc(response.user!.uid)
@@ -131,8 +136,9 @@ class AuthRemoteDatasourcesImpl implements AuthRemoteDatasources {
             UserModel(
                     uid: user.user!.uid,
                     email: user.user!.email ?? '',
-                    firstName: user.user!.displayName ?? '',
-                    lastName: user.user!.displayName ?? '')
+                    name: user.user!.displayName ?? '',
+                    landArea: 0,
+                    irrigationMethod: '')
                 .toMap());
       }
       String firstName = '';
@@ -145,8 +151,10 @@ class AuthRemoteDatasourcesImpl implements AuthRemoteDatasources {
       return UserModel(
           uid: user.user!.uid,
           email: user.user!.email ?? '',
-          firstName: firstName,
-          lastName: lastName);
+          name: user.user!.displayName ?? '',
+          landArea: 0,
+          irrigationMethod: '');
+         
     } catch (e) {
       print(e.toString());
       throw ServerException(message: e.toString());

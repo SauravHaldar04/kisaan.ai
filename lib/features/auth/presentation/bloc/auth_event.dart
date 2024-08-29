@@ -4,11 +4,13 @@ part of 'auth_bloc.dart';
 sealed class AuthEvent {}
 
 final class AuthSignUp extends AuthEvent {
-  final String firstName;
-  final String lastName;
+  final String name;
+  final double landArea;
+  final String irrigationMethod;
   final String email;
   final String password;
-  AuthSignUp(this.email, this.password,  this.firstName, this.lastName);
+  AuthSignUp(this.email, this.password, this.name, this.landArea,
+      this.irrigationMethod);
 }
 
 final class AuthLogIn extends AuthEvent {
@@ -17,21 +19,13 @@ final class AuthLogIn extends AuthEvent {
   AuthLogIn(this.email, this.password);
 }
 
-final class AuthEmailVerification extends AuthEvent {
+final class AuthEmailVerification extends AuthEvent {}
 
-}
+final class AuthGoogleSignIn extends AuthEvent {}
 
-final class AuthGoogleSignIn extends AuthEvent {
+final class AuthIsUserLoggedIn extends AuthEvent {}
 
-}
-
-final class AuthIsUserLoggedIn extends AuthEvent {
-
-}
-
-final class AuthIsUserEmailVerified extends AuthEvent {
-
-}
+final class AuthIsUserEmailVerified extends AuthEvent {}
 
 class AuthEmailVerificationCompleted extends AuthEvent {}
 
@@ -39,4 +33,3 @@ class AuthEmailVerificationFailed extends AuthEvent {
   final String message;
   AuthEmailVerificationFailed(this.message);
 }
-

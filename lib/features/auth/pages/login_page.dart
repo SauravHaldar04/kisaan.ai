@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
 import 'package:nfc3_overload_oblivion/features/auth/pages/signupp_page.dart';
 import 'package:nfc3_overload_oblivion/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:nfc3_overload_oblivion/features/home/home_page.dart';
 import 'package:provider/provider.dart';
 
 import 'dart:math';
@@ -151,9 +152,32 @@ class _LoginWidgetState extends State<LoginWidget>
                 ),
                 BlocConsumer<AuthBloc, AuthState>(
                   listener: (context, state) {
-                    // TODO: implement listener
+                    if (state is AuthSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Login Successful'),
+                        ),
+                      );
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const HomePage(),
+                        ),
+                      );
+                    }
                   },
                   builder: (context, state) {
+                    if (state is AuthFailure) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(state.message),
+                        ),
+                      );
+                    }
+                    if (state is AuthLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                     return Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Container(
