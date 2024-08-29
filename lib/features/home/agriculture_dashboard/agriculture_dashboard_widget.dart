@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nfc3_overload_oblivion/features/home/widgets/bell_icon.dart';
+import 'package:nfc3_overload_oblivion/features/home/widgets/crop_card_widget.dart';
 import 'package:provider/provider.dart';
 
 class AgricultureDashboardWidget extends StatefulWidget {
@@ -25,6 +27,19 @@ class AgricultureDashboardWidget extends StatefulWidget {
 class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
     with TickerProviderStateMixin {
   late AgricultureDashboardModel _model;
+  List<Map<String, dynamic>> crops = [];
+  TextEditingController cropNameController = TextEditingController();
+  TextEditingController landAreaController = TextEditingController();
+  void _addCrop(String cropName, String landArea) {
+    setState(() {
+      crops.add({
+        'cropName': cropName,
+        'landArea': landArea,
+        'imageUrl':
+            'https://unsplash.com/photos/an-american-flag-on-top-of-a-building-yH-91E4c5_4', // Placeholder image URL, replace with actual images
+      });
+    });
+  }
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -208,36 +223,112 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                         ),
                       ],
                     ),
-                    FlutterFlowIconButton(
-                      borderColor: AppPallete.primaryColor,
-                      borderRadius: 20,
-                      borderWidth: 1,
-                      buttonSize: 40,
-                      fillColor: AppPallete.accent1,
-                      icon: Icon(
-                        Icons.notifications_active,
-                        color: AppPallete.primaryText,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        print('IconButton pressed ...');
-                      },
-                    ),
+                    NotificationToggleButton(),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16, 12, 0, 0),
-                child: Text(
-                  'Categories',
-                  style: TextStyle(
-                    fontFamily: 'Outfit',
-                    color: Color(0xFF0F1113),
-                    fontSize: 20,
-                    letterSpacing: 0,
-                    fontWeight: FontWeight.normal,
+              //This is the code for adding crops
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 0, 0),
+                    child: Text(
+                      'Your crops',
+                      style: TextStyle(
+                        fontFamily: 'Outfit',
+                        color: AppPallete.primaryText,
+                        fontSize: 20,
+                        letterSpacing: 0,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                   ),
-                ),
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Add Crop'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                DropdownButtonFormField<String>(
+                                  decoration: InputDecoration(
+                                    labelText: 'Crop Name',
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        color: AppPallete.secondaryText,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        color: AppPallete.primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                  items: ['Crop 1', 'Crop 2', 'Crop 3']
+                                      .map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    cropNameController.text = newValue!;
+                                  },
+                                ),
+                                SizedBox(height: 16),
+                                TextField(
+                                  controller: landAreaController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Land Area (in meters)',
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        color: AppPallete.secondaryText,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        color: AppPallete.primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Text('Add'),
+                                onPressed: () {
+                                  _addCrop(
+                                    cropNameController.text,
+                                    landAreaController.text,
+                                  );
+
+                                  // Add logic to handle adding the crop
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
               ),
               Container(
                 width: double.infinity,
@@ -245,255 +336,20 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                 decoration: BoxDecoration(
                   color: Color(0xFFF1F5F8),
                 ),
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  primary: false,
-                  shrinkWrap: true,
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  children: [
-                    Padding(
+                  itemCount: crops.length,
+                  itemBuilder: (context, index) {
+                    final crop = crops[index];
+                    return Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(16, 12, 12, 12),
-                      child: Container(
-                        width: 230,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x34090F13),
-                              offset: Offset(
-                                0.0,
-                                2,
-                              ),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 140,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF81E1D7),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(0),
-                                  topLeft: Radius.circular(12),
-                                  topRight: Radius.circular(12),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: 150,
-                                    child: Stack(
-                                      alignment: AlignmentDirectional(-1, 0),
-                                      children: [
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-0.91, 0),
-                                          child: Container(
-                                            width: 28,
-                                            height: 28,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Image.network(
-                                              'https://images.unsplash.com/photo-1610737241336-371badac3b66?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                              fit: BoxFit.fitWidth,
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-0.62, 0),
-                                          child: Container(
-                                            width: 28,
-                                            height: 28,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Image.network(
-                                              'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                              fit: BoxFit.fitWidth,
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-0.35, 0),
-                                          child: Container(
-                                            width: 28,
-                                            height: 28,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Image.network(
-                                              'https://images.unsplash.com/photo-1598346762291-aee88549193f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTV8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                              fit: BoxFit.fitHeight,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 0, 8, 0),
-                                    child: Text(
-                                      '30%',
-                                      style: TextStyle(
-                                        fontFamily: 'Outfit',
-                                        color: Color(0xFF0F1113),
-                                        fontSize: 14,
-                                        letterSpacing: 0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ).animateOnPageLoad(
-                          animationsMap['containerOnPageLoadAnimation1']!),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 16, 12),
-                      child: Container(
-                        width: 230,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x34090F13),
-                              offset: Offset(
-                                0.0,
-                                2,
-                              ),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 140,
-                              decoration: BoxDecoration(
-                                color: Color(0xFFF1B49B),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(0),
-                                  topLeft: Radius.circular(12),
-                                  topRight: Radius.circular(12),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(12, 12, 12, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: 150,
-                                    child: Stack(
-                                      alignment: AlignmentDirectional(-1, 0),
-                                      children: [
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-0.91, 0),
-                                          child: Container(
-                                            width: 28,
-                                            height: 28,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Image.network(
-                                              'https://images.unsplash.com/photo-1610737241336-371badac3b66?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                              fit: BoxFit.fitWidth,
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-0.62, 0),
-                                          child: Container(
-                                            width: 28,
-                                            height: 28,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Image.network(
-                                              'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                              fit: BoxFit.fitWidth,
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-0.35, 0),
-                                          child: Container(
-                                            width: 28,
-                                            height: 28,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Image.network(
-                                              'https://images.unsplash.com/photo-1598346762291-aee88549193f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTV8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                              fit: BoxFit.fitHeight,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 0, 8, 0),
-                                    child: Text(
-                                      '30%',
-                                      style: TextStyle(
-                                        fontFamily: 'Outfit',
-                                        color: Color(0xFF0F1113),
-                                        fontSize: 14,
-                                        letterSpacing: 0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ).animateOnPageLoad(
-                          animationsMap['containerOnPageLoadAnimation2']!),
-                    ),
-                  ],
+                      child: CropCardWidget(
+                        cropName: crop['cropName']!,
+                        landArea: crop['landArea']!,
+                        imageUrl: crop['imageUrl']!,
+                      ),
+                    );
+                  },
                 ),
               ),
               Padding(

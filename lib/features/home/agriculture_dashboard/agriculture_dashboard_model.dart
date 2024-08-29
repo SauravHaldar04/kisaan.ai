@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard_widget.dart';
+import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard/agriculture_dashboard_widget.dart';
 
 class AgricultureDashboardModel
     extends FlutterFlowModel<AgricultureDashboardWidget> {

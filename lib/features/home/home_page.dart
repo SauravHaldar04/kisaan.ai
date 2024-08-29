@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
-import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard_widget.dart';
+import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard/agriculture_dashboard_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
