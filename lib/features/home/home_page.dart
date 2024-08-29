@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
+import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard/agriculture_dashboard_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,11 +13,7 @@ class _HomePageState extends State<HomePage> {
   int currentPage = 1;
 
   List<Widget> pages = [
-    Scaffold(
-      body: Center(
-        child: Text('Home Page'),
-      ),
-    ),
+    AgricultureDashboardWidget(),
     Scaffold(
       body: Center(
         child: Text('Crop Reports'),
