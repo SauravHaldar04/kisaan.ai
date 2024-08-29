@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
         selectedFontSize: 10,
         unselectedFontSize: 10,
         iconSize: 35,
-        selectedItemColor: Colors.red,
+        selectedItemColor: AppPallete.primaryColor,
         onTap: (value) {
           setState(() {
             currentPage = value;
@@ -57,11 +58,11 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
               icon: Container(child: Icon(Icons.home)), label: 'Home'),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'Shop'),
+              icon: Icon(Icons.grass), label: 'Crop Reports'),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_bag), label: 'Bag'),
+              icon: Icon(Icons.spa_outlined), label: 'Soil Reports'),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: 'Favourites'),
+              icon: Icon(Icons.cloud), label: 'Weather'),
           const BottomNavigationBarItem(
               icon: Icon(Icons.person), label: 'Profile'),
         ],
