@@ -180,7 +180,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(40),
                               child: Image.network(
-                                'https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mzh8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
+                                'https://th.bing.com/th/id/R.858e31ac1a2f642fb3ab0015d3f1acfa?rik=k06tBKUH3pIPaQ&riu=http%3a%2f%2fpngimg.com%2fuploads%2ffarmer%2ffarmer_PNG48.png&ehk=7n37l1%2fyRYfmF6FUNG%2bZeKYCOQDTyyb4D8jyHZ%2fPeWw%3d&risl=&pid=ImgRaw&r=0',
                                 width: 40,
                                 height: 40,
                                 fit: BoxFit.cover,
