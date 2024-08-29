@@ -6,8 +6,9 @@ import 'package:nfc3_overload_oblivion/common/error/failure.dart';
 
 abstract interface class AuthRepository{
   Future<Either<Failure,User>> signInWithEmailAndPassword({
-    required String firstName,
-    required String lastName,
+    required String name,
+    required double landArea,
+    required String irrigationMethod,
     required String email,
     required String password,
   });

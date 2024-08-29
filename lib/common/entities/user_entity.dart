@@ -2,8 +2,10 @@
 class  User {
   final String uid;
   final String email;
-  final String firstName;
-  final String lastName;
+  final String name;
+  final double landArea;
+  final String irrigationMethod;
 
-  User({required this.uid, required this.email, required this.firstName, required this.lastName});
+
+  User(this.name, this.landArea, this.irrigationMethod, {required this.uid, required this.email, });
 }

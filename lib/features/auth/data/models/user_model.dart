@@ -9,13 +9,16 @@ class UserModel extends User {
   UserModel({
     required String uid,
     required String email,
-    required String firstName,
-    required String lastName,
+    required String name,
+    required double landArea,
+    required String irrigationMethod,
+
   }) : super(
+          name,
+          landArea,
+          irrigationMethod,
           uid: uid,
           email: email,
-          firstName: firstName,
-          lastName: lastName,
         );
   
   
@@ -23,14 +26,16 @@ class UserModel extends User {
   UserModel copyWith({
     String? uid,
     String? email,
-    String? firstName,
-    String? lastName,
+    String? name,
+    double? landArea,
+    String? irrigationMethod,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
       email: email ?? this.email,
-      firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
+      name: name ?? this.name,
+      landArea: landArea ?? this.landArea,
+      irrigationMethod: irrigationMethod ?? this.irrigationMethod,
     );
   }
 
@@ -38,8 +43,9 @@ class UserModel extends User {
     return <String, dynamic>{
       'uid': uid,
       'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
+      'name': name,
+      'landArea': landArea,
+      'irrigationMethod': irrigationMethod,
     };
   }
 
@@ -47,8 +53,9 @@ class UserModel extends User {
     return UserModel(
       uid: map['uid'] as String,
       email: map['email'] as String,
-      firstName: map['firstName'] as String,
-      lastName: map['lastName'] as String,
+      name: map['name'] as String,
+      landArea: map['landArea'] as double,
+      irrigationMethod: map['irrigationMethod'] as String,
     );
   }
 
@@ -58,7 +65,7 @@ class UserModel extends User {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, email: $email, firstName: $firstName, lastName: $lastName)';
+    return 'UserModel(uid: $uid, email: $email, name: $name, landArea: $landArea, irrigationMethod: $irrigationMethod)';
   }
 
   @override
@@ -68,15 +75,17 @@ class UserModel extends User {
     return 
       other.uid == uid &&
       other.email == email &&
-      other.firstName == firstName &&
-      other.lastName == lastName;
+      other.name == name &&
+      other.landArea == landArea &&
+      other.irrigationMethod == irrigationMethod;
   }
 
   @override
   int get hashCode {
     return uid.hashCode ^
       email.hashCode ^
-      firstName.hashCode ^
-      lastName.hashCode;
+      name.hashCode ^
+      landArea.hashCode ^
+      irrigationMethod.hashCode;
   }
 }

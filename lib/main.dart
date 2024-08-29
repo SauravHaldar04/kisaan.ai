@@ -27,6 +27,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    // TODO: implement initState
+    context.read<AuthBloc>().add(AuthIsUserLoggedIn());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -35,7 +41,14 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: BlocSelector<AuthBloc, AuthState, bool>(selector: (state) {
+        return state is AuthUserLoggedIn;
+      }, builder: (context, state) {
+        if (state) {
+          return const HomePage();
+        }
+        return const LoginWidget();
+      }),
     );
   }
 }
