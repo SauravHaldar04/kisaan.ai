@@ -1,5 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:nfc3_overload_oblivion/common/error/server_exception.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
+import 'package:nfc3_overload_oblivion/features/auth/data/datasources/auth_remote_datasources.dart';
+import 'package:nfc3_overload_oblivion/features/auth/data/models/user_model.dart';
+import 'package:nfc3_overload_oblivion/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:nfc3_overload_oblivion/features/auth/domain/repository/auth_repository.dart';
 import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard/agriculture_dashboard_model.dart';
 
 // import '/flutter_flow/flutter_flow_animations.dart';
@@ -14,6 +21,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nfc3_overload_oblivion/features/home/widgets/bell_icon.dart';
 import 'package:nfc3_overload_oblivion/features/home/widgets/crop_card_widget.dart';
+import 'package:nfc3_overload_oblivion/init_dependencies.dart';
 import 'package:provider/provider.dart';
 
 class AgricultureDashboardWidget extends StatefulWidget {
@@ -30,13 +38,83 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
   List<Map<String, dynamic>> crops = [];
   TextEditingController cropNameController = TextEditingController();
   TextEditingController landAreaController = TextEditingController();
+  List<String> cropsList = [
+    'Apple',
+    'Rice',
+    'Corn',
+    'Blueberry',
+    'Cherry',
+    'Garlic',
+    'Grape',
+    'Orange',
+    'Peach',
+    'Pepper',
+    'Potato',
+    'Raspberry',
+    'Soyabean',
+    'Strawberry',
+    'Sugarcane',
+    'Tomato',
+    'Tea',
+    'Cabbage',
+    'Ginger',
+    'Lemon',
+    'Onion',
+  ];
+  String getImageUrlForCrop(String cropName) {
+    if (cropName == 'Apple') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg';
+    } else if (cropName == 'Rice') {
+      return 'https://images.pexels.com/photos/6129010/pexels-photo-6129010.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260';
+    } else if (cropName == 'Corn') {
+      return 'https://iadsb.tmgrup.com.tr/48c5ff/0/0/0/0/1732/1104?u=https://idsb.tmgrup.com.tr/2019/01/06/beyond-taste-the-many-health-benefits-of-corn-1546803009016.jpg';
+    } else if (cropName == 'Blueberry') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/1/15/Blueberries.jpg';
+    } else if (cropName == 'Cherry') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/b/bb/Cherry_Stella444.jpg';
+    } else if (cropName == 'Garlic') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Garlic_bulbs.jpg';
+    } else if (cropName == 'Grape') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/b/bb/Table_grapes_on_white.jpg';
+    } else if (cropName == 'Orange') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/c/c4/Orange-Fruit-Pieces.jpg';
+    } else if (cropName == 'Peach') {
+      return 'https://th.bing.com/th/id/R.e09a44d895f926bd6d1068fe16648fed?rik=Lqyko0gxPcO3kg&riu=http%3a%2f%2fblogs.extension.iastate.edu%2fwellness%2ffiles%2f2014%2f08%2fpeach.jpg&ehk=dc6D3rY3FNVyoytf%2b0DaZgyKzAQh17OQReRtFQANWLw%3d&risl=&pid=ImgRaw&r=0';
+    } else if (cropName == 'Pepper') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Pepper_crop.jpg';
+    } else if (cropName == 'Potato') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Potato_and_cross_section.jpg';
+    } else if (cropName == 'Raspberry') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/4/46/Raspberries05.jpg';
+    } else if (cropName == 'Soyabean') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Soybean.USDA.jpg';
+    } else if (cropName == 'Strawberry') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/2/29/PerfectStrawberry.jpg';
+    } else if (cropName == 'Sugarcane') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/0/00/Sugar_cane_field.jpg';
+    } else if (cropName == 'Tomato') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/8/89/Tomato_je.jpg';
+    } else if (cropName == 'Tea') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/4/47/Tea_leaves.jpg';
+    } else if (cropName == 'Cabbage') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Cabbage_and_cross_section_on_white.jpg';
+    } else if (cropName == 'Ginger') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Ginger_Root.jpg';
+    } else if (cropName == 'Lemon') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/7/71/Lemon.png';
+    } else if (cropName == 'Onion') {
+      return 'https://upload.wikimedia.org/wikipedia/commons/7/71/Onion.png';
+    } else {
+      return 'https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg'; // Placeholder image
+    }
+  }
+
   void _addCrop(String cropName, String landArea) {
     setState(() {
       crops.add({
         'cropName': cropName,
         'landArea': landArea,
-        'imageUrl':
-            'https://unsplash.com/photos/an-american-flag-on-top-of-a-building-yH-91E4c5_4', // Placeholder image URL, replace with actual images
+        'imageUrl': getImageUrlForCrop(cropName),
       });
     });
   }
@@ -45,9 +123,53 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
 
   final animationsMap = <String, AnimationInfo>{};
 
+  UserModel? _userModel;
+
+  Future<UserModel?> getCurrentUser() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        print('User is not logged in.');
+        return null;
+      }
+
+      print('User ID: ${user.uid}');
+
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (!docSnapshot.exists) {
+        print('User document does not exist.');
+        return null;
+      }
+
+      return UserModel.fromMap(docSnapshot.data()!);
+    } catch (e) {
+      if (e is FirebaseException) {
+        print('FirebaseException: ${e.message}, Code: ${e.code}');
+      } else {
+        print('Error: ${e.toString()}');
+      }
+      return null; // Ensure function returns null in case of an error
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    getCurrentUser().then((userModel) {
+      if (userModel != null) {
+        setState(() {
+          _userModel = userModel;
+          print(userModel.name); // Assuming 'name' is a property of UserModel
+        });
+      } else {
+        print('Failed to fetch user model.');
+      }
+    });
     _model = createModel(context, () => AgricultureDashboardModel());
 
     _model.tabBarController = TabController(
@@ -195,7 +317,9 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Max Rosco',
+                                _userModel == null
+                                    ? "Farmer"
+                                    : _userModel!.name,
                                 style: TextStyle(
                                   fontFamily: 'Outfit',
                                   color: Color(0xFF0F1113),
@@ -208,7 +332,9 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                                 child: Text(
-                                  'Good morning Max!',
+                                  _userModel == null
+                                      ? "Good morning! Farmer"
+                                      : 'Good morning ${_userModel!.name}!',
                                   style: TextStyle(
                                     fontFamily: 'Outfit',
                                     color: Color(0xFF57636C),
@@ -271,8 +397,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                       ),
                                     ),
                                   ),
-                                  items: ['Crop 1', 'Crop 2', 'Crop 3']
-                                      .map((String value) {
+                                  items: cropsList.map((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
                                       child: Text(value),

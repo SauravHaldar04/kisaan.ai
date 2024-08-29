@@ -32,6 +32,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     context.read<AuthBloc>().add(AuthIsUserLoggedIn());
+    super.initState();
   }
 
   @override
@@ -48,7 +49,7 @@ class _MyAppState extends State<MyApp> {
         return state is AuthUserLoggedIn;
       }, builder: (context, state) {
         if (state) {
-          return const ReportWidget();
+          return const HomePage();
         }
         return const LoginWidget();
       }),
