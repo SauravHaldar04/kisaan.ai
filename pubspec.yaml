@@ -36,6 +36,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   flutterflow_ui: ^0.3.1
+  firebase_auth: ^5.2.0
+  firebase_core: ^3.4.0
+  cloud_firestore: ^5.3.0
+  google_sign_in: ^6.2.1
+  fpdart: ^1.1.0
+  internet_connection_checker_plus: ^2.5.1
+  flutter_bloc: ^8.1.6
 
 dev_dependencies:
   flutter_test:
@@ -78,12 +85,12 @@ flutter:
   fonts:
     - family: Outfit
       fonts:
-        - asset: assets\fonts\Outfit-VariableFont_wght.ttf
+        - asset: assets/fonts/Outfit/static/Outfit-Regular.ttf
         # - asset: fonts/Schyler-Italic.ttf
         #   style: italic
     - family: Readex Pro
       fonts:
-        - asset: assets\fonts\Readex_Pro\ReadexPro-VariableFont_HEXP,wght.ttf
+        - asset: assets/fonts/Readex_Pro/ReadexPro-VariableFont_HEXP,wght.ttf
         # - asset: fonts/TrajanPro_Bold.ttf
         #   weight: 700
   #

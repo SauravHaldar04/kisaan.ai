@@ -141,8 +141,8 @@ class _LoginWidgetState extends State<LoginWidget>
                       'kisaan.ai',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 40.0,
+                        fontWeight: FontWeight.bold,
                         fontFamily: 'Outfit',
                       ),
                     ),
