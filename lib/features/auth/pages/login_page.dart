@@ -1,114 +1,114 @@
-// import 'dart:math';
-// import 'package:flutter/gestures.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/scheduler.dart';
-// import 'package:flutter_animate/flutter_animate.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:provider/provider.dart';
+import 'dart:math';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
-// import 'dart:math';
-// import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'dart:math';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
 
-// class LoginModel extends FlutterFlowModel<LoginWidget> {
-//   ///  State fields for stateful widgets in this page.
+class LoginModel extends FlutterFlowModel<LoginWidget> {
+  ///  State fields for stateful widgets in this page.
 
-//   final unfocusNode = FocusNode();
-//   // State field(s) for emailAddress widget.
-//   FocusNode? emailAddressFocusNode;
-//   TextEditingController? emailAddressTextController;
-//   String? Function(BuildContext, String?)? emailAddressTextControllerValidator;
-//   // State field(s) for password widget.
-//   FocusNode? passwordFocusNode;
-//   TextEditingController? passwordTextController;
-//   late bool passwordVisibility;
-//   String? Function(BuildContext, String?)? passwordTextControllerValidator;
+  final unfocusNode = FocusNode();
+  // State field(s) for emailAddress widget.
+  FocusNode? emailAddressFocusNode;
+  TextEditingController? emailAddressTextController;
+  String? Function(BuildContext, String?)? emailAddressTextControllerValidator;
+  // State field(s) for password widget.
+  FocusNode? passwordFocusNode;
+  TextEditingController? passwordTextController;
+  late bool passwordVisibility;
+  String? Function(BuildContext, String?)? passwordTextControllerValidator;
 
-//   @override
-//   void initState(BuildContext context) {
-//     passwordVisibility = false;
-//   }
+  @override
+  void initState(BuildContext context) {
+    passwordVisibility = false;
+  }
 
-//   @override
-//   void dispose() {
-//     emailAddressFocusNode?.dispose();
-//     emailAddressTextController?.dispose();
+  @override
+  void dispose() {
+    emailAddressFocusNode?.dispose();
+    emailAddressTextController?.dispose();
 
-//     passwordFocusNode?.dispose();
-//     passwordTextController?.dispose();
-//   }
-// }
+    passwordFocusNode?.dispose();
+    passwordTextController?.dispose();
+  }
+}
 
-// class LoginWidget extends StatefulWidget {
-//   const LoginWidget({super.key});
+class LoginWidget extends StatefulWidget {
+  const LoginWidget({super.key});
 
-//   @override
-//   State<LoginWidget> createState() => _LoginWidgetState();
-// }
+  @override
+  State<LoginWidget> createState() => _LoginWidgetState();
+}
 
-// class _LoginWidgetState extends State<LoginWidget>
-//     with TickerProviderStateMixin {
-//   late LoginModel _model;
+class _LoginWidgetState extends State<LoginWidget>
+    with TickerProviderStateMixin {
+  late LoginModel _model;
 
-//   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
-//   final animationsMap = <String, AnimationInfo>{};
+  final animationsMap = <String, AnimationInfo>{};
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _model = createModel(context, () => LoginModel());
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => LoginModel());
 
-//     _model.emailAddressTextController ??= TextEditingController();
-//     _model.emailAddressFocusNode ??= FocusNode();
+    _model.emailAddressTextController ??= TextEditingController();
+    _model.emailAddressFocusNode ??= FocusNode();
 
-//     _model.passwordTextController ??= TextEditingController();
-//     _model.passwordFocusNode ??= FocusNode();
+    _model.passwordTextController ??= TextEditingController();
+    _model.passwordFocusNode ??= FocusNode();
 
-//     animationsMap.addAll({
-//       'containerOnPageLoadAnimation': AnimationInfo(
-//         trigger: AnimationTrigger.onPageLoad,
-//         effectsBuilder: () => [
-//           VisibilityEffect(duration: 1.ms),
-//           FadeEffect(
-//             curve: Curves.easeInOut,
-//             delay: 0.0.ms,
-//             duration: 300.0.ms,
-//             begin: 0.0,
-//             end: 1.0,
-//           ),
-//           MoveEffect(
-//             curve: Curves.easeInOut,
-//             delay: 0.0.ms,
-//             duration: 300.0.ms,
-//             begin: Offset(0.0, 140.0),
-//             end: Offset(0.0, 0.0),
-//           ),
-//           ScaleEffect(
-//             curve: Curves.easeInOut,
-//             delay: 0.0.ms,
-//             duration: 300.0.ms,
-//             begin: Offset(0.9, 1.0),
-//             end: Offset(1.0, 1.0),
-//           ),
-//           TiltEffect(
-//             curve: Curves.easeInOut,
-//             delay: 0.0.ms,
-//             duration: 300.0.ms,
-//             begin: Offset(-0.349, 0),
-//             end: Offset(0, 0),
-//           ),
-//         ],
-//       ),
-//     });
-//   }
+    animationsMap.addAll({
+      'containerOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 1.ms),
+          FadeEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 300.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(0.0, 140.0),
+            end: Offset(0.0, 0.0),
+          ),
+          ScaleEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(0.9, 1.0),
+            end: Offset(1.0, 1.0),
+          ),
+          TiltEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(-0.349, 0),
+            end: Offset(0, 0),
+          ),
+        ],
+      ),
+    });
+  }
 
-//   @override
-//   void dispose() {
-//     _model.dispose();
+  @override
+  void dispose() {
+    _model.dispose();
 
-//     super.dispose();
-//   }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,21 +222,21 @@
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0x4B39EF),
+                                        color: Color.fromARGB(255, 75, 57, 239),
                                         width: 2.0,
                                       ),
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0x4B39EF),
+                                        color: Color.fromARGB(255, 75, 57, 239),
                                         width: 2.0,
                                       ),
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                     errorBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0xE0E3E7),
+                                        color: Colors.grey,
                                       ),
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
@@ -282,13 +282,13 @@
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0x4B39EF),
+                                        color: Color.fromARGB(255, 75, 57, 239),
                                       ),
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0x4B39EF),
+                                        color: Color.fromARGB(255, 75, 57, 239),
                                         width: 2.0,
                                       ),
                                       borderRadius: BorderRadius.circular(12.0),
@@ -349,7 +349,7 @@
                                       0.0, 0.0, 0.0, 0.0),
                                   iconPadding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 0.0, 0.0, 0.0),
-                                  color: Color(0x4B39EF),
+                                  color: Color.fromARGB(255, 75, 57, 239),
                                   textStyle: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16.0,
@@ -405,7 +405,7 @@
                                   ),
                                   elevation: 0.0,
                                   borderSide: BorderSide(
-                                    color: Colors.white,
+                                    color: Colors.grey,
                                     width: 2.0,
                                   ),
                                   borderRadius: BorderRadius.circular(12.0),
@@ -414,49 +414,49 @@
                               ),
                             ),
 
-//                             // You will have to add an action on this rich text to go to your login page.
-//                             Padding(
-//                               padding: EdgeInsetsDirectional.fromSTEB(
-//                                   0.0, 12.0, 0.0, 12.0),
-//                               child: RichText(
-//                                 textScaler: MediaQuery.of(context).textScaler,
-//                                 text: TextSpan(
-//                                   children: [
-//                                     TextSpan(
-//                                       text: 'Don\'t have an account?  ',
-//                                       style: TextStyle(),
-//                                     ),
-//                                     TextSpan(
-//                                       text: 'Sign Up here',
-//                                       style: TextStyle(
-//                                         color: Color(0xFF101F3C),
-//                                         fontSize: 16.0,
-//                                         fontWeight: FontWeight.normal,
-//                                         fontFamily: 'Readex Pro',
-//                                       ),
-//                                     )
-//                                   ],
-//                                   style: TextStyle(
-//                                     color: Color(0xFF101F3C),
-//                                     fontSize: 16.0,
-//                                     fontWeight: FontWeight.normal,
-//                                     fontFamily: 'Readex Pro',
-//                                   ),
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                   ).animateOnPageLoad(
-//                       animationsMap['containerOnPageLoadAnimation']!),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+                            // You will have to add an action on this rich text to go to your login page.
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 12.0, 0.0, 12.0),
+                              child: RichText(
+                                textScaler: MediaQuery.of(context).textScaler,
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Don\'t have an account?  ',
+                                      style: TextStyle(),
+                                    ),
+                                    TextSpan(
+                                      text: 'Sign Up here',
+                                      style: TextStyle(
+                                        color: Color(0xFF101F3C),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Readex Pro',
+                                      ),
+                                    )
+                                  ],
+                                  style: TextStyle(
+                                    color: Color(0xFF101F3C),
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.normal,
+                                    fontFamily: 'Readex Pro',
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ).animateOnPageLoad(
+                      animationsMap['containerOnPageLoadAnimation']!),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
