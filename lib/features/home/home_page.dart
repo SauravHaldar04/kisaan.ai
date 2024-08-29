@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
 import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard/agriculture_dashboard_widget.dart';
+import 'package:nfc3_overload_oblivion/features/home/weather_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,11 +25,7 @@ class _HomePageState extends State<HomePage> {
         child: Text('Soil Reports'),
       ),
     ),
-    Scaffold(
-      body: Center(
-        child: Text('Weather'),
-      ),
-    ),
+    WeatherScreen()
   ];
 
   @override
