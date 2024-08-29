@@ -164,8 +164,6 @@ class _LoginWidgetState extends State<LoginWidget>
                         ),
                       );
                     }
-                  },
-                  builder: (context, state) {
                     if (state is AuthFailure) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -173,6 +171,8 @@ class _LoginWidgetState extends State<LoginWidget>
                         ),
                       );
                     }
+                  },
+                  builder: (context, state) {
                     if (state is AuthLoading) {
                       return const Center(
                         child: CircularProgressIndicator(),

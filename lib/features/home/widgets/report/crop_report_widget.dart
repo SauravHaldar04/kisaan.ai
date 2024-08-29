@@ -80,6 +80,16 @@ class _ReportWidgetState extends State<ReportWidget>
         backgroundColor: AppPallete.secondaryBackground,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          title: Text(
+            'Crop Report',
+            style: TextStyle(
+              fontFamily: "Outfit",
+              color: AppPallete.primaryText,
+              fontSize: 24.0,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          centerTitle: true,
         ),
         body: SafeArea(
           top: true,
@@ -90,14 +100,6 @@ class _ReportWidgetState extends State<ReportWidget>
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Crop Report',
-                    style: TextStyle(
-                      color: AppPallete.primaryText,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
                   Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
@@ -118,6 +120,7 @@ class _ReportWidgetState extends State<ReportWidget>
                       Text(widget.cropName,
                           textAlign: TextAlign.start,
                           style: TextStyle(
+                            fontFamily: 'Outfit',
                             color: AppPallete.primaryText,
                             fontSize: 20.0,
                             fontWeight: FontWeight.w600,
@@ -126,6 +129,7 @@ class _ReportWidgetState extends State<ReportWidget>
                         widget.cropDescription,
                         textAlign: TextAlign.start,
                         style: TextStyle(
+                          fontFamily: 'Outfit',
                           color: AppPallete.primaryText,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w500,
@@ -168,6 +172,7 @@ class _ReportWidgetState extends State<ReportWidget>
                                 'Upload Image for analysis',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
+                                  fontFamily: 'Outfit',
                                   color: AppPallete.primaryColor,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w500,
@@ -201,6 +206,7 @@ class _ReportWidgetState extends State<ReportWidget>
                         color: AppPallete.primaryColor,
                         textStyle: TextStyle(
                           color: AppPallete.secondaryBackground,
+                          fontFamily: 'Outfit',
                           fontSize: 18.0,
                           fontWeight: FontWeight.w600,
                         ),
@@ -219,6 +225,7 @@ class _ReportWidgetState extends State<ReportWidget>
                       child: Text(
                         'Analysis Report:',
                         style: TextStyle(
+                          fontFamily: 'Outfit',
                           color: AppPallete.primaryText,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w600,
@@ -228,6 +235,7 @@ class _ReportWidgetState extends State<ReportWidget>
                       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
                       textAlign: TextAlign.start,
                       style: TextStyle(
+                        fontFamily: 'Outfit',
                         color: AppPallete.primaryText,
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500,

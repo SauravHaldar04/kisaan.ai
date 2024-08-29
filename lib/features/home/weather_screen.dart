@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:intl/intl.dart';
 import 'package:nfc3_overload_oblivion/Api_keys/secret.dart';
+import 'package:nfc3_overload_oblivion/common/global/placemark.dart';
 import 'package:nfc3_overload_oblivion/features/home/widgets/additional_info_item.dart';
 
 import 'package:flutter/material.dart';
@@ -17,10 +18,9 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   Future<Map<String, dynamic>> getCurrentWeather() async {
     try {
-      String cityName = 'London';
       final res = await http.get(
         Uri.parse(
-            'https://api.openweathermap.org/data/2.5/forecast?q=$cityName&APPID=$OpenWeatherApiKey'),
+            'https://api.openweathermap.org/data/2.5/forecast?q=${placemarks[0].administrativeArea}&APPID=$OpenWeatherApiKey'),
       );
       final data = jsonDecode(res.body);
       if (data['cod'] != '200') {
@@ -56,6 +56,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           'Weather Forecast',
           style: TextStyle(
             fontWeight: FontWeight.bold,
+            fontFamily: "Outfit",
           ),
         ),
         centerTitle: true,
@@ -115,6 +116,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 Text(
                                   '$currentTemp K',
                                   style: const TextStyle(
+                                    fontFamily: 'Outfit',
                                     fontSize: 35,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -139,6 +141,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   const Text(
                     'Daily Forecast',
                     style: TextStyle(
+                      fontFamily: 'Outfit',
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -155,43 +158,50 @@ class _WeatherScreenState extends State<WeatherScreen> {
                         final temp = forecast['main']['temp'];
                         final skyCondition = forecast['weather'][0]['main'];
 
-                        return Card(
-                          elevation: 5,
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(7.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  DateFormat('EEEE, MMM d').format(date),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                        return Column(
+                          children: [
+                            Card(
+                              elevation: 5,
+                              margin: const EdgeInsets.symmetric(horizontal: 8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(7.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      DateFormat('EEEE, MMM d').format(date),
+                                      style: const TextStyle(
+                                        fontFamily: 'Outfit',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Icon(
+                                      skyCondition == 'Clouds' ||
+                                              skyCondition == 'Rain'
+                                          ? Icons.cloud
+                                          : Icons.sunny,
+                                      size: 48,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      '$temp K',
+                                      style: const TextStyle(
+                                        fontFamily: 'Outfit',
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(skyCondition),
+                                  ],
                                 ),
-                                const SizedBox(height: 10),
-                                Icon(
-                                  skyCondition == 'Clouds' ||
-                                          skyCondition == 'Rain'
-                                      ? Icons.cloud
-                                      : Icons.sunny,
-                                  size: 48,
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  '$temp K',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(skyCondition),
-                              ],
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 10),
+                          ],
                         );
                       },
                     ),
@@ -200,6 +210,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   const Text(
                     'Additional Information',
                     style: TextStyle(
+                      fontFamily: 'Outfit',
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),

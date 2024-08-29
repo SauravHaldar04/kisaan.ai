@@ -20,11 +20,20 @@ class AdditionalInfoItem extends StatelessWidget {
           size: 32,
         ),
         const SizedBox(height: 8),
-        Text(label),
+        Text(label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Outfit',
+            )),
         const SizedBox(height: 8),
         Text(
           Value,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Outfit',
+          ),
         ),
       ],
     );
