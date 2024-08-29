@@ -9,7 +9,14 @@ import 'package:nfc3_overload_oblivion/features/home/widgets/report/crop_report_
 import 'package:provider/provider.dart';
 
 class ReportWidget extends StatefulWidget {
-  const ReportWidget({super.key});
+  final String cropName;
+  final String imageUrl;
+  final String cropDescription;
+  const ReportWidget(
+      {super.key,
+      required this.cropName,
+      required this.imageUrl,
+      required this.cropDescription});
 
   @override
   State<ReportWidget> createState() => _ReportWidgetState();
@@ -72,11 +79,7 @@ class _ReportWidgetState extends State<ReportWidget>
         key: scaffoldKey,
         backgroundColor: AppPallete.secondaryBackground,
         appBar: AppBar(
-          backgroundColor: AppPallete.primaryBackground,
-          automaticallyImplyLeading: false,
-          actions: [],
-          centerTitle: false,
-          elevation: 0.0,
+          backgroundColor: Colors.transparent,
         ),
         body: SafeArea(
           top: true,
@@ -90,7 +93,7 @@ class _ReportWidgetState extends State<ReportWidget>
                   Text(
                     'Crop Report',
                     style: TextStyle(
-                      color: AppPallete.primaryColor,
+                      color: AppPallete.primaryText,
                       fontSize: 24.0,
                       fontWeight: FontWeight.w600,
                     ),
@@ -101,7 +104,7 @@ class _ReportWidgetState extends State<ReportWidget>
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12.0),
                       child: Image.network(
-                        'https://picsum.photos/seed/867/600',
+                        widget.imageUrl,
                         width: double.infinity,
                         height: 200.0,
                         fit: BoxFit.cover,
@@ -112,13 +115,18 @@ class _ReportWidgetState extends State<ReportWidget>
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Wheat',
-                          textAlign: TextAlign.start, style: TextStyle()),
+                      Text(widget.cropName,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: AppPallete.primaryText,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                          )),
                       Text(
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                        widget.cropDescription,
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                          color: AppPallete.primaryColor,
+                          color: AppPallete.primaryText,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w500,
                         ),
@@ -211,7 +219,7 @@ class _ReportWidgetState extends State<ReportWidget>
                       child: Text(
                         'Analysis Report:',
                         style: TextStyle(
-                          color: AppPallete.primaryColor,
+                          color: AppPallete.primaryText,
                           fontSize: 20.0,
                           fontWeight: FontWeight.w600,
                         ),
@@ -220,7 +228,7 @@ class _ReportWidgetState extends State<ReportWidget>
                       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                        color: AppPallete.primaryColor,
+                        color: AppPallete.primaryText,
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500,
                       )),

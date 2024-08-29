@@ -44,7 +44,8 @@ dependencies:
   internet_connection_checker_plus: ^2.5.1
   flutter_bloc: ^8.1.6
   get_it: ^7.7.0
-  # flutterflow_ui: ^0.3.1
+  flutterflow_ui: ^0.3.1
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
