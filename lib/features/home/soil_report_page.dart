@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -17,36 +18,6 @@ class SoilReportPage extends StatefulWidget {
 }
 
 class _SoilReportPageState extends State<SoilReportPage> {
-  void saveSoilData(String soilType, String nitrogen, String phosphorus,
-      String cropImagePath, String potassium, String pH) async {
-    try {
-      // Upload image to Firebase Storage
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('crop_images')
-          .child(DateTime.now().millisecondsSinceEpoch.toString());
-      final uploadTask = storageRef.putFile(File(cropImagePath));
-      final snapshot = await uploadTask.whenComplete(() => null);
-      final imageUrl = await snapshot.ref.getDownloadURL();
-
-      // Store data in Firestore
-      FirebaseFirestore.instance.collection('soil_reports').add({
-        'soilType': soilType,
-        'nitrogenRange': nitrogen,
-        'phosphorusRange': phosphorus,
-        'potassiumRange': potassium,
-        'pHRange': pH,
-        'cropImageUrl': imageUrl,
-      }).then((value) {
-        print('Soil data saved successfully!');
-      }).catchError((error) {
-        print('Failed to save soil data: $error');
-      });
-    } catch (e) {
-      print('Error uploading image and saving soil data: $e');
-    }
-  }
-
   bool _imageUploaded = false;
   // Flag to track image upload
   String? soilType;
@@ -107,7 +78,70 @@ class _SoilReportPageState extends State<SoilReportPage> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _image = null;
+    soilType = null;
+    nitrogen = null;
+    phosphorus = null;
+    potassium = null;
+    pH = null;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    void saveSoilData(String soilType, String nitrogen, String phosphorus,
+        File cropImageFile, String potassium, String pH) async {
+      try {
+        // Check if the file exists
+        if (!cropImageFile.existsSync()) {
+          print('Error: Image file does not exist.');
+          return;
+        }
+
+        // Upload image to Firebase Storage
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('crop_images')
+            .child(DateTime.now().millisecondsSinceEpoch.toString());
+
+        // Upload the file
+        final uploadTask = storageRef.putFile(cropImageFile);
+
+        // Handle upload completion and errors
+        final snapshot = await uploadTask.catchError((error) {
+          print('Error uploading image: $error');
+          return null; // Handle upload error
+        });
+
+        if (snapshot == null) {
+          print('Failed to upload the image.');
+          return; // Exit if image upload failed
+        }
+
+        // Get the download URL of the uploaded image
+        final imageUrl = await snapshot.ref.getDownloadURL();
+
+        // Store data in Firestore
+        await FirebaseFirestore.instance.collection('soil_reports').add({
+          'soilType': soilType,
+          'nitrogenRange': nitrogen,
+          'phosphorusRange': phosphorus,
+          'potassiumRange': potassium,
+          'pHRange': pH,
+          'cropImageUrl': imageUrl,
+          'userId': FirebaseAuth.instance.currentUser!.uid,
+        }).then((value) {
+          print('Soil data saved successfully!');
+        }).catchError((error) {
+          print('Failed to save soil data: $error');
+        });
+      } catch (e) {
+        print('Error uploading image and saving soil data: $e');
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -240,41 +274,56 @@ class _SoilReportPageState extends State<SoilReportPage> {
                         ),
                       ),
                     const SizedBox(height: 24.0),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 12.0),
-                      child: FFButtonWidget(
-                        onPressed: () {
-                          saveSoilData(soilType!, nitrogen!, phosphorus!,
-                              _image!.path, potassium!, pH!);
-                        },
-                        text: "Save Report",
-                        icon: Icon(
-                          Icons.analytics_sharp,
-                          size: 30.0,
-                        ),
-                        options: FFButtonOptions(
-                          width: double.infinity,
-                          height: 54.0,
-                          padding: EdgeInsets.all(0.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          color: AppPallete.primaryColor,
-                          textStyle: TextStyle(
-                            color: AppPallete.secondaryBackground,
-                            fontFamily: 'Outfit',
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w600,
+                    if (soilType != null)
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            0.0, 24.0, 0.0, 12.0),
+                        child: FFButtonWidget(
+                          onPressed: () {
+                            saveSoilData(
+                              soilType!,
+                              nitrogen!,
+                              phosphorus!,
+                              _image!,
+                              potassium!,
+                              pH!,
+                            );
+                            setState(() {
+                              _image = null;
+                              soilType = null;
+                              nitrogen = null;
+                              phosphorus = null;
+                              potassium = null;
+                              pH = null;
+                            });
+                          },
+                          text: "Save Report",
+                          icon: Icon(
+                            Icons.analytics_sharp,
+                            size: 30.0,
                           ),
-                          elevation: 4.0,
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1.0,
+                          options: FFButtonOptions(
+                            width: double.infinity,
+                            height: 54.0,
+                            padding: EdgeInsets.all(0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: AppPallete.primaryColor,
+                            textStyle: TextStyle(
+                              color: AppPallete.secondaryBackground,
+                              fontFamily: 'Outfit',
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            elevation: 4.0,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(12.0),
                           ),
-                          borderRadius: BorderRadius.circular(12.0),
                         ),
                       ),
-                    ),
                   ],
                 ),
               )
