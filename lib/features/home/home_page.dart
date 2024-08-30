@@ -6,6 +6,7 @@ import 'package:nfc3_overload_oblivion/features/home/chat_help/chat_Help2.dart';
 import 'package:nfc3_overload_oblivion/features/home/recommendation_page.dart';
 import 'package:nfc3_overload_oblivion/features/home/soil_report_page.dart';
 import 'package:nfc3_overload_oblivion/features/home/weather_screen.dart';
+import 'package:nfc3_overload_oblivion/features/home/widgets/mcrop_main_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,11 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> pages = [
     AgricultureDashboardWidget(),
-    Scaffold(
-      body: Center(
-        child: Text('Crop Reports'),
-      ),
-    ),
+    MainCropPage(),
     SoilReportPage(),
     WeatherScreen(),
     ChatHelp2(),

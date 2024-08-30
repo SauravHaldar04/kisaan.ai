@@ -1,8 +1,115 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class RecommendationPage extends StatelessWidget {
+class RecommendationPage extends StatefulWidget {
   const RecommendationPage({super.key});
+
+  @override
+  State<RecommendationPage> createState() => _RecommendationPageState();
+}
+
+class _RecommendationPageState extends State<RecommendationPage> {
+  String result = '';
+  bool loading = false;
+
+  Future<void> getDataAndSendRequest() async {
+    setState(() {
+      loading = true;
+    });
+
+    try {
+      // Fetching data from Firestore collections
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+      // final cropsDoc = await FirebaseFirestore.instance
+      //     .collection('crops')
+      //     .where(field)
+      //     .get();
+      final soilDoc = await FirebaseFirestore.instance
+          .collection('soil_reports')
+          .doc('SOIL_REPORT_ID')
+          .get();
+
+      // Extract data
+      final irrigationMethods = userDoc['irrigation_methods'];
+      final landSize = userDoc['land_size'];
+      // final cropDisease = cropsDoc['crop_disease'];
+      // final cropName = cropsDoc['crop_name'];
+      final soilType = soilDoc['soil_type'];
+      final soilInfo = soilDoc['soil_info'];
+      final climate = soilDoc['climate'];
+
+      // Create the payload
+      final requestBody = jsonEncode({
+        'irrigation_methods': irrigationMethods,
+        'land_size': landSize,
+        // 'crop_disease': cropDisease,
+        // 'crop_name': cropName,
+        'soil_type': soilType,
+        'soil_info': soilInfo,
+        'climate': climate,
+      });
+
+      // Send POST request
+      final response = await http.post(
+        Uri.parse('https://your-api-url.com/answer_query'),
+        headers: {'Content-Type': 'application/json'},
+        body: requestBody,
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        setState(() {
+          result = data['answer'];
+        });
+      } else {
+        setState(() {
+          result = 'Failed to get recommendations.';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        result = 'Error: $e';
+      });
+    } finally {
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  List<Widget> parseRecommendations(String recommendations) {
+    final List<Widget> widgets = [];
+    final parsedData = jsonDecode(recommendations);
+
+    parsedData.forEach((heading, description) {
+      widgets.add(Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Text(
+          heading,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.green,
+          ),
+        ),
+      ));
+      widgets.add(Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Text(
+          description.join(', '), // Join the list of descriptions with commas
+          style: const TextStyle(fontSize: 16, color: Colors.black),
+        ),
+      ));
+    });
+
+    return widgets;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +121,7 @@ class RecommendationPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
@@ -22,7 +129,7 @@ class RecommendationPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 28.0,
                 fontWeight: FontWeight.bold,
-                color: AppPallete.primaryColor,
+                color: Colors.green,
               ),
               textAlign: TextAlign.center,
             ),
@@ -35,8 +142,7 @@ class RecommendationPage extends StatelessWidget {
             const SizedBox(height: 40.0),
             ElevatedButton(
               onPressed: () {
-                // Perform POST request to ML model
-                // TODO: Implement logic to fetch personalized recommendations
+                getDataAndSendRequest();
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
@@ -44,7 +150,7 @@ class RecommendationPage extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                backgroundColor: AppPallete.primaryColor,
+                backgroundColor: Colors.green,
               ),
               child: const Text(
                 'Get Recommendations',
@@ -55,6 +161,16 @@ class RecommendationPage extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 40.0),
+            loading
+                ? const CircularProgressIndicator()
+                : result.isNotEmpty
+                    ? Expanded(
+                        child: ListView(
+                          children: parseRecommendations(result),
+                        ),
+                      )
+                    : Container(),
           ],
         ),
       ),
