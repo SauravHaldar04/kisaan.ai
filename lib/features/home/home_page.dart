@@ -3,6 +3,7 @@ import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
 import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard/agriculture_dashboard_widget.dart';
 
 import 'package:nfc3_overload_oblivion/features/home/chat_help/chat_Help2.dart';
+import 'package:nfc3_overload_oblivion/features/home/recommendation_page.dart';
 import 'package:nfc3_overload_oblivion/features/home/soil_report_page.dart';
 import 'package:nfc3_overload_oblivion/features/home/weather_screen.dart';
 
@@ -23,14 +24,10 @@ class _HomePageState extends State<HomePage> {
         child: Text('Crop Reports'),
       ),
     ),
-    Scaffold(
-      body: Center(
-        child: Text('Crop Reports'),
-      ),
-    ),
     SoilReportPage(),
     WeatherScreen(),
     ChatHelp2(),
+    RecommendationPage(),
   ];
 
   @override
@@ -64,6 +61,9 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.cloud), label: 'Weather'),
           const BottomNavigationBarItem(
               icon: Icon(Icons.chat), label: 'Chat Help'),
+          const BottomNavigationBarItem(
+              icon: Icon(Icons.spatial_tracking_outlined),
+              label: 'Recommendation'),
         ],
       ),
     );
