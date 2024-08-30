@@ -17,9 +17,6 @@ class SoilReportPage extends StatefulWidget {
 }
 
 class _SoilReportPageState extends State<SoilReportPage> {
-
-
-
   void saveSoilData(String soilType, String nitrogen, String phosphorus,
       String cropImagePath, String potassium, String pH) async {
     try {
