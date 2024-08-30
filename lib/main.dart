@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
         if (state) {
           return const HomePage();
         }
-        return const HomePage();
+        return const LoginWidget();
       }),
     );
   }
