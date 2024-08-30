@@ -52,6 +52,8 @@ dependencies:
   dash_chat_2: ^0.0.20
   provider: ^6.1.2
   file_picker: ^8.0.7
+  image: ^4.2.0
+  firebase_storage: ^12.2.0
 
 dev_dependencies:
   flutter_test:

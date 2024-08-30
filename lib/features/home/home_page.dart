@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
 import 'package:nfc3_overload_oblivion/common/global/placemark.dart';
 import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard/agriculture_dashboard_widget.dart';
-import 'package:nfc3_overload_oblivion/features/home/chat_help/chat_Help.dart';
 import 'package:nfc3_overload_oblivion/features/home/chat_help/chat_Help2.dart';
 import 'package:nfc3_overload_oblivion/features/home/soil_report_page.dart';
 import 'package:nfc3_overload_oblivion/features/home/weather_screen.dart';

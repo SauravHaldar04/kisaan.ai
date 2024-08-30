@@ -42,26 +42,16 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
   TextEditingController landAreaController = TextEditingController();
   List<String> cropsList = [
     'Apple',
-    'Rice',
     'Corn',
-    'Blueberry',
     'Cherry',
-    'Garlic',
     'Grape',
     'Orange',
     'Peach',
     'Pepper',
     'Potato',
-    'Raspberry',
-    'Soyabean',
     'Strawberry',
-    'Sugarcane',
     'Tomato',
-    'Tea',
-    'Cabbage',
-    'Ginger',
-    'Lemon',
-    'Onion',
+    'Wheat',
   ];
 
   String getCropDescription(String cropName) {
@@ -207,8 +197,8 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
       return 'https://upload.wikimedia.org/wikipedia/commons/1/15/Blueberries.jpg';
     } else if (cropName == 'Cherry') {
       return 'https://upload.wikimedia.org/wikipedia/commons/b/bb/Cherry_Stella444.jpg';
-    } else if (cropName == 'Garlic') {
-      return 'https://static.fanpage.it/wp-content/uploads/sites/22/2018/05/istock-531644839.jpg';
+    } else if (cropName == 'Wheat') {
+      return 'https://cdn.agdaily.com/wp-content/uploads/2016/09/wheat.jpg';
     } else if (cropName == 'Grape') {
       return 'https://upload.wikimedia.org/wikipedia/commons/b/bb/Table_grapes_on_white.jpg';
     } else if (cropName == 'Orange') {

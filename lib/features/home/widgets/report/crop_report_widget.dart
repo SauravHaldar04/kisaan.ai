@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'dart:math';
@@ -48,10 +50,14 @@ class _ReportWidgetState extends State<ReportWidget>
           'Content-Type': 'application/json',
         },
         body: json.encode(<String, dynamic>{
-          'content': base64.encode(await File(imageFile!.path).readAsBytes())
+          'content': base64.encode(await imageFile!.readAsBytes() as Uint8List)
         }),
       );
       print(json.decode(response.body));
+      setState(() {
+        detectedDisease = json.decode(response.body)['crop_disease'];
+        diseaseDescription = json.decode(response.body)['crop_info'];
+      });
     } catch (e) {
       print(e);
     }
@@ -115,6 +121,28 @@ class _ReportWidgetState extends State<ReportWidget>
     _model.dispose();
 
     super.dispose();
+  }
+
+  void updateCropsDatabase(String userId, String cropName, String reportImage,
+      String reportDisease, String reportDescription) {
+    FirebaseFirestore.instance
+        .collection('crops')
+        .where('userId', isEqualTo: userId)
+        .where('cropName', isEqualTo: cropName)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        doc.reference.update({
+          'reportImage': reportImage,
+          'reportDisease': reportDisease,
+          'reportDescription': reportDescription,
+        }).then((value) {
+          print('Crops database updated successfully');
+        }).catchError((error) {
+          print('Failed to update crops database: $error');
+        });
+      });
+    });
   }
 
   @override
@@ -291,7 +319,7 @@ class _ReportWidgetState extends State<ReportWidget>
                         ),
                       ),
                     ),
-                  if (imageFile != null)
+                  if (detectedDisease != null)
                     Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
@@ -306,24 +334,89 @@ class _ReportWidgetState extends State<ReportWidget>
                         )),
                   if (detectedDisease != null)
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Detected Disease: $detectedDisease',
+                        Text('Detected Disease:',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontFamily: 'Outfit',
                               color: AppPallete.primaryText,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
                             )),
-                        Text('Description: $diseaseDescription',
+                        Text(
+                          '$detectedDisease',
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            color: AppPallete.primaryText,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Text('Description:',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontFamily: 'Outfit',
                               color: AppPallete.primaryText,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w500,
-                            ))
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Text(
+                          '$diseaseDescription',
+                          style: TextStyle(
+                            fontFamily: 'Outfit',
+                            color: AppPallete.primaryText,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ],
+                    ),
+                  const SizedBox(height: 40),
+                  if (detectedDisease != null)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 12.0),
+                      child: FFButtonWidget(
+                        onPressed: () {
+                          if (detectedDisease != null) {
+                            updateCropsDatabase(
+                                FirebaseAuth.instance.currentUser!.uid,
+                                widget.cropName,
+                                imageFile!.path,
+                                detectedDisease!,
+                                diseaseDescription!);
+                            Navigator.pop(context);
+                          }
+                        },
+                        text: "Save Report",
+                        icon: Icon(
+                          Icons.analytics_sharp,
+                          size: 30.0,
+                        ),
+                        options: FFButtonOptions(
+                          width: double.infinity,
+                          height: 54.0,
+                          padding: EdgeInsets.all(0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: AppPallete.primaryColor,
+                          textStyle: TextStyle(
+                            color: AppPallete.secondaryBackground,
+                            fontFamily: 'Outfit',
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          elevation: 4.0,
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                      ),
                     ),
                 ],
               ),

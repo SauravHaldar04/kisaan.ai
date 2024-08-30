@@ -93,6 +93,7 @@ class DetailedReportPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24.0),
+            
           ],
         ),
       ),
