@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 
-
 Future<File?> pickImage() async {
   try {
     final pickedFile = await FilePicker.platform

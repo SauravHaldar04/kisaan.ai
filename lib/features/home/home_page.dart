@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:nfc3_overload_oblivion/common/global/app_pallete.dart';
-import 'package:nfc3_overload_oblivion/common/global/placemark.dart';
 import 'package:nfc3_overload_oblivion/features/home/agriculture_dashboard/agriculture_dashboard_widget.dart';
-import 'package:nfc3_overload_oblivion/features/home/chat_help/chat_Help.dart';
+
 import 'package:nfc3_overload_oblivion/features/home/chat_help/chat_Help2.dart';
 import 'package:nfc3_overload_oblivion/features/home/soil_report_page.dart';
 import 'package:nfc3_overload_oblivion/features/home/weather_screen.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,17 +23,15 @@ class _HomePageState extends State<HomePage> {
         child: Text('Crop Reports'),
       ),
     ),
+    Scaffold(
+      body: Center(
+        child: Text('Crop Reports'),
+      ),
+    ),
     SoilReportPage(),
     WeatherScreen(),
     ChatHelp2(),
   ];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
