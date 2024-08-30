@@ -6,9 +6,9 @@ import 'package:nfc3_overload_oblivion/common/global/placemark.dart';
 import 'package:nfc3_overload_oblivion/features/auth/pages/login_page.dart';
 import 'package:nfc3_overload_oblivion/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:nfc3_overload_oblivion/features/home/home_page.dart';
-import 'package:nfc3_overload_oblivion/features/home/widgets/report/crop_report_widget.dart';
 import 'package:nfc3_overload_oblivion/init_dependencies.dart';
 import 'package:provider/provider.dart';
+import 'dart:async'; // Import Timer
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,11 +37,61 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late Timer _alertTimer;
+
   @override
   void initState() {
-    // TODO: implement initState
-    context.read<AuthBloc>().add(AuthIsUserLoggedIn());
     super.initState();
+    context.read<AuthBloc>().add(AuthIsUserLoggedIn());
+    _startAlertTimer();
+  }
+
+  void _startAlertTimer() {
+    // List of alerts to show
+    final List<String> alerts = [
+      "Remember to water your crops.",
+      "Time to check soil health.",
+      "Harvest season is approaching!",
+      "Consider applying fertilizer."
+    ];
+
+    int alertIndex = 0;
+
+    _alertTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      // Show alert if there are still alerts to show
+      if (alertIndex < alerts.length) {
+        _showAlert(alerts[alertIndex]);
+        alertIndex++;
+      } else {
+        timer.cancel(); // Stop the timer when all alerts have been shown
+      }
+    });
+  }
+
+  void _showAlert(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Reminder'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _alertTimer.cancel(); // Cancel timer when widget is disposed
+    super.dispose();
   }
 
   @override
@@ -54,14 +104,12 @@ class _MyAppState extends State<MyApp> {
             ColorScheme.fromSeed(seedColor: AppPallete.primaryBackground),
         useMaterial3: true,
       ),
-      home: BlocSelector<AuthBloc, AuthState, bool>(selector: (state) {
-        return state is AuthUserLoggedIn;
-      }, builder: (context, state) {
-        if (state) {
-          return const HomePage();
-        }
-        return const LoginWidget();
-      }),
+      home: BlocSelector<AuthBloc, AuthState, bool>(
+        selector: (state) => state is AuthUserLoggedIn,
+        builder: (context, isLoggedIn) {
+          return isLoggedIn ? const HomePage() : const LoginWidget();
+        },
+      ),
     );
   }
 }

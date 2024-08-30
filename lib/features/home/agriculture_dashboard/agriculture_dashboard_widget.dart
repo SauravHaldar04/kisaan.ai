@@ -766,7 +766,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'Design Template Screens',
+                                                  'Water the Crops',
                                                   style: TextStyle(
                                                     fontFamily: 'Outfit',
                                                     color: Color(0xFF0F1113),
@@ -780,7 +780,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                                   padding: EdgeInsetsDirectional
                                                       .fromSTEB(0, 4, 0, 0),
                                                   child: Text(
-                                                    'Create template screen for task todo app.',
+                                                    'Ensure all crops are adequately watered by 5:00 PM today to maintain soil moisture levels.',
                                                     style: TextStyle(
                                                       fontFamily: 'Outfit',
                                                       color: Color(0xFF57636C),
@@ -887,7 +887,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Theme Collection',
+                                              'Check Soil pH',
                                               style: TextStyle(
                                                 fontFamily: 'Outfit',
                                                 color: Color(0xFF0F1113),
@@ -900,7 +900,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(0, 4, 0, 0),
                                               child: Text(
-                                                'Create themes for use by our users.',
+                                                'Test the soil pH levels in the north field to ensure optimal growing conditions for the crops.',
                                                 style: TextStyle(
                                                   fontFamily: 'Outfit',
                                                   color: Color(0xFF57636C),
@@ -1015,7 +1015,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'Design Template Screens',
+                                                'Water the Crops',
                                                 style: TextStyle(
                                                   fontFamily: 'Outfit',
                                                   color: Color(0xFF0F1113),
@@ -1030,7 +1030,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(0, 4, 0, 0),
                                                 child: Text(
-                                                  'Create template screen for task todo app.',
+                                                  'Ensure all crops are adequately watered by 5:00 PM today to maintain soil moisture levels.',
                                                   style: TextStyle(
                                                     fontFamily: 'Outfit',
                                                     color: Color(0xFF57636C),
@@ -1133,7 +1133,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Design Template Screens',
+                                              'Check pH of Soil',
                                               style: TextStyle(
                                                 fontFamily: 'Outfit',
                                                 color: Color(0xFF0F1113),
@@ -1148,7 +1148,7 @@ class _AgricultureDashboardWidgetState extends State<AgricultureDashboardWidget>
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(0, 4, 0, 0),
                                               child: Text(
-                                                'Create template screen for task todo app.',
+                                                'Test the soil pH levels in the north field to ensure optimal growing conditions for the crops.',
                                                 style: TextStyle(
                                                   fontFamily: 'Outfit',
                                                   color: Color(0xFF57636C),
