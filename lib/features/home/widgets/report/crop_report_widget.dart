@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'dart:math';
@@ -123,26 +124,59 @@ class _ReportWidgetState extends State<ReportWidget>
     super.dispose();
   }
 
-  void updateCropsDatabase(String userId, String cropName, String reportImage,
-      String reportDisease, String reportDescription) {
-    FirebaseFirestore.instance
-        .collection('crops')
-        .where('userId', isEqualTo: userId)
-        .where('cropName', isEqualTo: cropName)
-        .get()
-        .then((querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        doc.reference.update({
-          'reportImage': reportImage,
-          'reportDisease': reportDisease,
-          'reportDescription': reportDescription,
-        }).then((value) {
-          print('Crops database updated successfully');
-        }).catchError((error) {
-          print('Failed to update crops database: $error');
+  void updateCropsDatabase(String userId, String cropName, File cropImageFile,
+      String reportDisease, String reportDescription) async {
+    try {
+      // Check if the file exists
+      if (!cropImageFile.existsSync()) {
+        print('Error: Image file does not exist.');
+        return;
+      }
+
+      // Upload image to Firebase Storage
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('crop_images')
+          .child(DateTime.now().millisecondsSinceEpoch.toString());
+
+      // Upload the file
+      final uploadTask = storageRef.putFile(cropImageFile);
+
+      // Handle upload completion and errors
+      final snapshot = await uploadTask.catchError((error) {
+        print('Error uploading image: $error');
+        return null; // Handle upload error
+      });
+
+      if (snapshot == null) {
+        print('Failed to upload the image.');
+        return; // Exit if image upload failed
+      }
+
+      // Get the download URL of the uploaded image
+      final imageUrl = await snapshot.ref.getDownloadURL();
+
+      FirebaseFirestore.instance
+          .collection('crops')
+          .where('userId', isEqualTo: userId)
+          .where('cropName', isEqualTo: cropName)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          doc.reference.update({
+            'reportImage': imageUrl,
+            'reportDisease': reportDisease,
+            'reportDescription': reportDescription,
+          }).then((value) {
+            print('Crops database updated successfully');
+          }).catchError((error) {
+            print('Failed to update crops database: $error');
+          });
         });
       });
-    });
+    } catch (e) {
+      print('Error updating crops database: $e');
+    }
   }
 
   @override
@@ -385,7 +419,7 @@ class _ReportWidgetState extends State<ReportWidget>
                             updateCropsDatabase(
                                 FirebaseAuth.instance.currentUser!.uid,
                                 widget.cropName,
-                                imageFile!.path,
+                                imageFile!,
                                 detectedDisease!,
                                 diseaseDescription!);
                             Navigator.pop(context);
